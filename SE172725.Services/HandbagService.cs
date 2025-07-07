@@ -1,6 +1,5 @@
 ﻿using SE172725.Repositories;
 using SE172725.Repositories.Models;
-using SE172725.Services.DTOs;
 
 namespace SE172725.Services
 {
@@ -13,18 +12,9 @@ namespace SE172725.Services
             _handbagRepository = new HandbagRepository();
         }
 
-        public Task<int> CreateAsync(HandbagRequest request)
+        public Task<int> CreateAsync(Handbag request)
         {
-            var handbag = new Handbag
-            {
-                ModelName = request.ModelName,
-                Material = request.Material,
-                Price = request.Price,
-                Stock = request.Stock,
-                BrandId = request.BrandId
-            };
-
-            return _handbagRepository.CreateAsync(handbag);
+            return _handbagRepository.CreateAsync(request);
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -43,18 +33,14 @@ namespace SE172725.Services
             return await _handbagRepository.GetByIdAsync(id);
         }
 
-        public Task<int> UpdateAsync(HandbagRequest request)
+        public async Task<List<Handbag>> SearchAllAsync(string modelName, string material)
         {
-            var handbag = new Handbag
-            {
-                ModelName = request.ModelName,
-                Material = request.Material,
-                Price = request.Price,
-                Stock = request.Stock,
-                BrandId = request.BrandId
-            };
+            return await _handbagRepository.SearchAsync(modelName, material);
+        }
 
-            return _handbagRepository.UpdateAsync(handbag);
+        public Task<int> UpdateAsync(Handbag request)
+        {
+            return _handbagRepository.UpdateAsync(request);
         }
     }
 }

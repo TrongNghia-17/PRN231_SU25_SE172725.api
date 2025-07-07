@@ -33,5 +33,20 @@ namespace SE172725.Repositories
 
             return item ?? new Handbag();
         }
+
+        public async Task<List<Handbag>> SearchAsync(string modelName, string material)
+        {
+            var item = await _context
+                .Handbags
+                .Include(x => x.Brand)
+                .Where(x =>
+                (
+                    (x.ModelName.Contains(modelName) || string.IsNullOrEmpty(modelName)) 
+                    && (x.Material.Contains(material) || string.IsNullOrEmpty(material)) 
+                ))
+                .ToListAsync(); 
+
+            return item ?? new List<Handbag>();
+        }
     }
 }
