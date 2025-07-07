@@ -1,21 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SE172725.Repositories.Basic;
 using SE172725.Repositories.DBContext;
 using SE172725.Repositories.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SE172725.Repositories
 {
-    public class HandbagRepository
+    public class HandbagRepository : GenericRepository<Handbag>
     {
         private readonly Summer2025HandbagDbContext _context;
 
         public HandbagRepository()
         {
-            _context = new DBContext.Summer2025HandbagDbContext();  
+            _context = new DBContext.Summer2025HandbagDbContext();
         }
 
         public async Task<List<Handbag>> GetAllAsync()
@@ -26,6 +22,16 @@ namespace SE172725.Repositories
                 .ToListAsync();
 
             return item ?? new List<Handbag>();
+        }
+
+        public async Task<Handbag> GetByIdAsync(int id)
+        {
+            var item = await _context
+                .Handbags
+                .Include(x => x.Brand)
+                .FirstOrDefaultAsync(x => x.HandbagId == id);
+
+            return item ?? new Handbag();
         }
     }
 }
