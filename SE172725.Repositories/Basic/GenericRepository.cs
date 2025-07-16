@@ -45,13 +45,25 @@ public class GenericRepository<T> where T : class
         _context.SaveChanges();
     }
 
+    //public async Task<int> UpdateAsync(T entity)
+    //{
+    //    //// Turning off Tracking for UpdateAsync in Entity Framework
+    //    _context.ChangeTracker.Clear();
+    //    var tracker = _context.Attach(entity);
+    //    tracker.State = EntityState.Modified;
+    //    return await _context.SaveChangesAsync();        
+    //}
+
     public async Task<int> UpdateAsync(T entity)
     {
-        //// Turning off Tracking for UpdateAsync in Entity Framework
-        _context.ChangeTracker.Clear();
-        var tracker = _context.Attach(entity);
-        tracker.State = EntityState.Modified;
-        return await _context.SaveChangesAsync();        
+        // Kiểm tra xem entity có tồn tại trong CSDL hay không
+        var entry = _context.Entry(entity);
+        if (entry.State == EntityState.Detached)
+        {
+            _context.Attach(entity);
+        }
+        entry.State = EntityState.Modified;
+        return await _context.SaveChangesAsync();
     }
 
     public bool Remove(T entity)

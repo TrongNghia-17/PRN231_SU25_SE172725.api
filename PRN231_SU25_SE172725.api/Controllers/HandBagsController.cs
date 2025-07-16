@@ -75,7 +75,7 @@ namespace PRN231_SU25_SE172725.api.Controllers
 
         [HttpPut("/api/handbags/{id}")]
         [Authorize(Roles = "1, 2")]
-        public async Task<IActionResult> Put([FromBody] Handbag request)
+        public async Task<IActionResult> Put([FromBody] Handbag request, int id)
         {
             try
             {
@@ -86,12 +86,13 @@ namespace PRN231_SU25_SE172725.api.Controllers
                     return BadRequest(new ErrorResponse("HB40001", errors ?? "Missing/invalid input"));
                 }
 
-                var existingHandbag = await _handbagService.GetByIdAsync(request.HandbagId);
+                var existingHandbag = await _handbagService.GetByIdAsync(id);
                 if (existingHandbag == null || existingHandbag.HandbagId == 0)
                 {
                     return NotFound(new ErrorResponse("HB40401", "Resource not found"));
                 }
 
+                request.HandbagId = id;
                 var result = await _handbagService.UpdateAsync(request);
                 return Ok(result);
             }

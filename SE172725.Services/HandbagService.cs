@@ -20,6 +20,12 @@ namespace SE172725.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var item = await _handbagRepository.GetByIdAsync(id);
+
+            if (item == null)
+            {
+                return false; // Trả về false nếu không tìm thấy bản ghi
+            }
+
             return await _handbagRepository.RemoveAsync(item);
         }
 

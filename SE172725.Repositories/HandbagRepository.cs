@@ -31,7 +31,7 @@ namespace SE172725.Repositories
                 .Include(x => x.Brand)
                 .FirstOrDefaultAsync(x => x.HandbagId == id);
 
-            return item ?? new Handbag();
+            return item;
         }
 
         public async Task<List<Handbag>> SearchAsync(string modelName, string material)
