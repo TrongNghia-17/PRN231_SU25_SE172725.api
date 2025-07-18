@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OData;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OData.Edm;
+using Microsoft.OData.ModelBuilder;
 using Microsoft.OpenApi.Models;
 using PRN231_SU25_SE172725.api;
 using PRN231_SU25_SE172725.api.Controllers;
+using SE172725.Repositories.Models;
 using SE172725.Services;
 using System.Text;
 using System.Text.Json;
@@ -92,6 +96,20 @@ builder.Services.AddSwaggerGen(option =>
             new string[]{}
         }
     });
+});
+
+static IEdmModel GetEdmModel()
+{
+    var odataBuilder = new ODataConventionModelBuilder();
+    odataBuilder.EntitySet<Handbag>("Handbag");
+    odataBuilder.EntitySet<Brand>("Brand");
+
+    return odataBuilder.GetEdmModel();
+}
+builder.Services.AddControllers().AddOData(options =>
+{
+    options.Select().Filter().OrderBy().Expand().SetMaxTop(null).Count();
+    options.AddRouteComponents("odata", GetEdmModel());
 });
 
 var app = builder.Build();

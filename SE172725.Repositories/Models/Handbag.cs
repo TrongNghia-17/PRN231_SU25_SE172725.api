@@ -6,6 +6,7 @@ namespace SE172725.Repositories.Models;
 
 public partial class Handbag
 {
+    [Key]
     public int HandbagId { get; set; }
 
     public int? BrandId { get; set; }

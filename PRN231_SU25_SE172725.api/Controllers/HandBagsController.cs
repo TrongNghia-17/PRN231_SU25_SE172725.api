@@ -121,12 +121,28 @@ namespace PRN231_SU25_SE172725.api.Controllers
             }
         }
 
-        [HttpGet("search")]
-        [EnableQuery]
+        //[HttpGet("search")]
+        //[EnableQuery]
+        ////[Authorize(Roles = "1, 2")]
+        //public async Task<List<Handbag>> SearchAll([FromQuery] string? modelName, [FromQuery] string? material)
+        //{
+        //    return await _handbagService.SearchAllAsync(modelName, material);
+        //}
+
+        [HttpGet("/api/handbagsQuery")]
         //[Authorize(Roles = "1, 2")]
-        public async Task<List<Handbag>> SearchAll([FromQuery] string? modelName, [FromQuery] string? material)
+        [EnableQuery]
+        public async Task<IActionResult> GetQuery()
         {
-            return await _handbagService.SearchAllAsync(modelName, material);
+            try
+            {
+                var handbags = await _handbagService.GetAllAsync();
+                return Ok(handbags);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ErrorResponse("HB50001", "Internal server error: " + ex.Message));
+            }
         }
     }
 

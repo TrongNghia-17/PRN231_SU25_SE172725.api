@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SE172725.Repositories.Models;
 
 public partial class Brand
 {
+    [Key]
     public int BrandId { get; set; }
 
     public string BrandName { get; set; } = null!;
